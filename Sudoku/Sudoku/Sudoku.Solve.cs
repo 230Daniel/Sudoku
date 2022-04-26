@@ -9,6 +9,19 @@ public partial class Sudoku
 
     public bool Solve()
     {
+        // First propagate effects of all pre-set tiles
+        foreach (var tile in Grid.Flatten().Where(x => x.Value.HasValue))
+        {
+            var result = TryPropegateEffectsToNeighbours(tile, tile.Value!.Value, null, false);
+            if (!result) return false;
+        }
+
+        // Then iterate recursively, performing the main algorithm
+        return IterateRecursively();
+    }
+
+    private bool IterateRecursively()
+    {
         var affectedTiles = new Stack<Tile>();
 
         // Choose the tile with the lowest entropy to assign a value to
@@ -28,7 +41,7 @@ public partial class Sudoku
             if (immediateResult)
             {
                 // This assignment works for now
-                var longTermResult = Solve();
+                var longTermResult = IterateRecursively();
                 if (longTermResult)
                 {
                     // This assignment did not cause any problems down the line

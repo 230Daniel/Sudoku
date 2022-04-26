@@ -32,10 +32,10 @@ public class Program
 
         Console.WriteLine($"Input:\n{sudoku}\n");
 
-        sudoku.Solve();
-        Console.WriteLine($"Solved:\n{sudoku}\n");
-
-        Console.WriteLine($"Iterations: {sudoku.Iterations}\n" +
-                          $"Failures:   {sudoku.Failures}");
+        var result = sudoku.Solve();
+        if (result)
+            Console.WriteLine($"Solved in {sudoku.Iterations} iterations with {sudoku.Failures} failures\n{sudoku}");
+        else
+            Console.WriteLine("Sudoku was not solveable");
     }
 }

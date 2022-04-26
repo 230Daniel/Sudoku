@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using Sudoku.Extensions;
 
 namespace Sudoku;
 
@@ -27,12 +26,6 @@ public partial class Sudoku
                 if (value == 0) sudoku.Grid[x, y] = Tile.Empty(x, y);
                 else sudoku.Grid[x, y] = Tile.FromValue(value, x, y);
             }
-        }
-
-        foreach (var tile in sudoku.Grid.Flatten().Where(x => x.Value.HasValue))
-        {
-            var result = sudoku.TryPropegateEffectsToNeighbours(tile, tile.Value!.Value, null, false);
-            if (!result) throw new ArgumentException("Given 2D array must be a valid sudoku", nameof(array));
         }
 
         return sudoku;
