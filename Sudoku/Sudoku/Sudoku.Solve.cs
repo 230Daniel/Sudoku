@@ -176,17 +176,17 @@ public partial class Sudoku
         var result = tile.TryDisallowValue(value);
         switch (result)
         {
-            case Tile.DisallowValueResult.Success:
+            case DisallowValueResult.Success:
                 // The tile has another possible value so this was okay
                 affectedTiles?.Push(tile);
                 return true;
 
-            case Tile.DisallowValueResult.Failure:
+            case DisallowValueResult.Failure:
                 // This was the tile's only possible value so this assignment would make the sudoku unsolvable
                 // No need to push this tile to affectedTiles as this action had no affect on the tile
                 return false;
 
-            case Tile.DisallowValueResult.DeterminedValue:
+            case DisallowValueResult.DeterminedValue:
                 // The tile only has one other possible value so can now be set
                 // This still counts as the same "assignment" so pass the same affectedTiles stack
                 // Return the result of this mini-assignment, if it causes issues then the original assignment would be invalid anyway

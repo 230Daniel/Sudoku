@@ -109,11 +109,4 @@ public class Tile
     {
         return Value.HasValue ? $" {Value.Value} " : "   ";
     }
-
-    public enum DisallowValueResult
-    {
-        Success,
-        Failure,
-        DeterminedValue
-    }
 }
