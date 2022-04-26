@@ -1,6 +1,8 @@
 # Sudoku
 A Sudoku solver in C# using the wave function collapse algorithm. I used NRTs for this project to see what all the fuss was about, I decided I'm not a fan.
 
+![Screenshot of program output](images/demo-screenshot.png)
+
 ## The Algorithm
 The method of solving the sudoku is as follows:
 
