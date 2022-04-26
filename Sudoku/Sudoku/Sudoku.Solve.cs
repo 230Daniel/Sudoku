@@ -4,8 +4,64 @@ namespace Sudoku;
 
 public partial class Sudoku
 {
-    public int Iterations { get; private set; }
-    public int Failures { get; private set; }
+    public bool IsSolved()
+    {
+        var valuesInSection = new List<int>();
+
+        // Check tiles in the same row
+        for (var y = 0; y < 9; y++)
+        {
+            valuesInSection.Clear();
+            for (var x = 0; x < 9; x++)
+            {
+                var tile = Grid[x, y];
+                if (!tile.Value.HasValue) return false;
+
+                var value = tile.Value.Value;
+                if (valuesInSection.Contains(value)) return false;
+                valuesInSection.Add(value);
+            }
+        }
+
+        // Check tiles in the same column
+        for (var x = 0; x < 9; x++)
+        {
+            valuesInSection.Clear();
+            for (var y = 0; y < 9; y++)
+            {
+                var tile = Grid[x, y];
+                if (!tile.Value.HasValue) return false;
+
+                var value = tile.Value.Value;
+                if (valuesInSection.Contains(value)) return false;
+                valuesInSection.Add(value);
+            }
+        }
+
+        // Check tiles in the same segment
+        for (var startY = 0; startY < 9; startY += 3)
+        {
+            for (var startX = 0; startX < 9; startX += 3)
+            {
+                valuesInSection.Clear();
+                for (var y = startY; y < startY + 3; y++)
+                {
+                    for (var x = startX; x < startX + 3; x++)
+                    {
+                        var tile = Grid[x, y];
+                        if (!tile.Value.HasValue) return false;
+
+                        var value = tile.Value.Value;
+                        if (valuesInSection.Contains(value)) return false;
+                        valuesInSection.Add(value);
+                    }
+                }
+            }
+        }
+
+        // If we found no issues the sudoku is solved correctly
+        return true;
+    }
 
     public bool Solve()
     {
@@ -45,14 +101,12 @@ public partial class Sudoku
                 if (longTermResult)
                 {
                     // This assignment did not cause any problems down the line
-                    Iterations++;
                     return true;
                 }
             }
 
             // This assigment was immediately invalid or caused a problem down the line
             // Revert the assignment and proceed with the next possible
-            Failures++;
             while (affectedTiles.Count > 0)
             {
                 var affectedTile = affectedTiles.Pop();
@@ -142,19 +196,5 @@ public partial class Sudoku
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    public bool IsSolved()
-    {
-        for (var x = 0; x < 9; x++)
-        {
-            for (var y = 0; y < 9; y++)
-            {
-                if (!Grid[x, y].Value.HasValue)
-                    return false;
-            }
-        }
-
-        return true;
     }
 }
